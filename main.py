@@ -1,4 +1,8 @@
+from window import Window
 
 
 def main():
-    print(f"Hi")
+    window = Window()
+
+
+main()
