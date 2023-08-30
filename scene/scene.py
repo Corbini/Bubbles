@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QGraphicsView, QGraphicsScene
 from PyQt6.QtGui import QResizeEvent
-from bubble import Bubble
+from bubble import BubbleCreator, Bubble
+from PyQt6.QtCore import QPoint
 
 
 class Scene(QGraphicsView):
@@ -9,15 +10,30 @@ class Scene(QGraphicsView):
         self.plane = QGraphicsScene(0, 0, width, height)
         super().__init__(self.plane)
         self.setParent(parent)
-        # Bubble.set_scene(self.plane)
+        Bubble.set_scene(self.plane)
 
-        # self.bubble = Bubble()
+        self.builder = BubbleCreator()
+        self.pressed = False
 
     def mousePressEvent(self, event) -> None:
-        pass
+        if self.pressed is False:
+            super().mousePressEvent(event)
+
+            if self.check_click(event):
+                self.pressed = True
+
+    def check_click(self, event):
+        print(self.itemAt(event.pos()))
+        if self.itemAt(event.pos()) is None:
+            position = event.pos()
+            self.builder.create(position)
+            return
+
+        return
 
     def mouseReleaseEvent(self, event) -> None:
-        pass
+        self.builder.stop_grow()
+        self.pressed = False
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         size = event.size()
