@@ -20,4 +20,5 @@ class BubbleCreator:
     def stop_grow(self):
         if self.bubble is not None:
             del self.timer
+            self.timer = None
             self.bubble = None
