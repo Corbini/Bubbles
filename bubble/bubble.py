@@ -1,6 +1,5 @@
 from PyQt6.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
-from PyQt6.QtGui import QPixmap, QImage, QMouseEvent
-from PyQt6.QtCore import QPointF
+from PyQt6.QtGui import QPixmap, QImage
 import time
 
 
@@ -23,13 +22,12 @@ class Bubble(QGraphicsPixmapItem):
         self.increment = 4
 
     def mousePressEvent(self, event) -> None:
-        self.__scene.removeItem(self)
-        self.timer = time.time_ns()
+        super().mouseReleaseEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
-        duration = time.time_ns() - self.timer
-        if duration < 200:
-            self.__scene.removeItem(self)
+        super().mouseReleaseEvent(event)
+
+        self.__scene.removeItem(self)
 
     def update_scale(self):
         scale = self.width/self.image.width()

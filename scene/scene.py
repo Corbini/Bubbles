@@ -16,24 +16,19 @@ class Scene(QGraphicsView):
         self.pressed = False
 
     def mousePressEvent(self, event) -> None:
-        if self.pressed is False:
-            super().mousePressEvent(event)
+        super().mousePressEvent(event)
 
-            if self.check_click(event):
-                self.pressed = True
-
-    def check_click(self, event):
-        print(self.itemAt(event.pos()))
-        if self.itemAt(event.pos()) is None:
+        if self.pressed is False and self.itemAt(event.pos()) is None:
             position = event.pos()
             self.builder.create(position)
-            return
-
-        return
+            self.pressed = True
 
     def mouseReleaseEvent(self, event) -> None:
-        self.builder.stop_grow()
-        self.pressed = False
+        super().mouseReleaseEvent(event)
+
+        if self.pressed:
+            self.builder.stop_grow()
+            self.pressed = False
 
     def resizeEvent(self, event: QResizeEvent) -> None:
         size = event.size()
